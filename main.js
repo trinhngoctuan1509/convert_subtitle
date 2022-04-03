@@ -3,7 +3,6 @@ document.getElementById("convert").addEventListener("click", convertSubtitle);
 let arrayInputSubtitleCleaned = [];
 let arrayOutputSubtitleHandled = [];
 let stringOutputSubtitleHandled = "";
-let formatSubtitleHaveIndex = false;
 let firstValueOfTimeLine = "";
 let secondValueOfTimeLine = "";
 let oneRecordTimeline = "";
@@ -13,16 +12,11 @@ function convertSubtitle() {
     let stringInputSubtitleNeededHandle = document.getElementById("inputSubtitleNeededHandle").value;
     let arrayInputSubtitleNeededHandle = stringInputSubtitleNeededHandle.split("\n");
 
-    getHeaderAndFormatOfSubtitleNeedHandle(arrayInputSubtitleNeededHandle);
-
     arrayInputSubtitleNeededHandle.forEach(cleanArrayInputSubtitleNeededHandle);
     arrayInputSubtitleCleaned.forEach(createArrayOutptSubtitle);
+    arrayOutputSubtitleHandled.forEach(createStringOutptSubtitle);
 
-    if (formatSubtitleHaveIndex) {
-        arrayOutputSubtitleHandled.forEach(createStringOutptSubtitleHaveIndex);
-    } else {
-        arrayOutputSubtitleHandled.forEach(createStringOutptSubtitleHaveNotIndex);
-    }
+    console.log(stringOutputSubtitleHandled);
 
     document.getElementById("outputSubtitleHandled").innerHTML = stringOutputSubtitleHandled;
 
@@ -36,7 +30,7 @@ function convertSubtitle() {
 
 function cleanArrayInputSubtitleNeededHandle(value) {
     let valueTrimmed = value.replace(/^\s+|\s+$/gm, "");
-    if (valueTrimmed != "" && valueTrimmed.includes("WEBVTT") == false && valueTrimmed.length > 3) {
+    if (valueTrimmed != "" && valueTrimmed != "WEBVTT" && valueTrimmed.length > 3) {
         arrayInputSubtitleCleaned.push(valueTrimmed);
     }
 }
@@ -60,25 +54,12 @@ function createArrayOutptSubtitle(value) {
     }
 }
 
-function createStringOutptSubtitleHaveNotIndex(value) {
+function createStringOutptSubtitle(value, index) {
     if (value.includes("-->")) {
         stringOutputSubtitleHandled = stringOutputSubtitleHandled.concat(value,"<br>");
-    } else {
+    } else if (index != arrayOutputSubtitleHandled.length-1) {
         stringOutputSubtitleHandled = stringOutputSubtitleHandled.concat(value,"<br><br>");
-    }
-}
-
-function createStringOutptSubtitleHaveIndex(value, index) {
-    if (value.includes("-->")) {
-        stringOutputSubtitleHandled = stringOutputSubtitleHandled.concat(index, "<br>", value,"<br>");
     } else {
-        stringOutputSubtitleHandled = stringOutputSubtitleHandled.concat(value,"<br><br>");
-    }
-}
-
-function getHeaderAndFormatOfSubtitleNeedHandle(arrayInputSubtitleNeededHandle){
-    stringOutputSubtitleHandled = stringOutputSubtitleHandled.concat(arrayInputSubtitleNeededHandle[0],"<br><br>");
-    if (arrayInputSubtitleNeededHandle[2] == 0) {
-        formatSubtitleHaveIndex = true;
+        stringOutputSubtitleHandled = stringOutputSubtitleHandled.concat(value);
     }
 }
