@@ -1,5 +1,7 @@
 document.getElementById("convert").addEventListener("click", convertSubtitle);
 
+let stringInputSubtitleNeededHandle = "";
+let arrayInputSubtitleNeededHandle = [];
 let arrayInputSubtitleCleaned = [];
 let arrayOutputSubtitleHandled = [];
 let stringOutputSubtitleHandled = "";
@@ -9,29 +11,23 @@ let oneRecordTimeline = "";
 let oneRecordSubtitle = "";
 
 function convertSubtitle() {
-    let stringInputSubtitleNeededHandle = document.getElementById("inputSubtitleNeededHandle").value;
-    let arrayInputSubtitleNeededHandle = stringInputSubtitleNeededHandle.split("\n");
+    stringInputSubtitleNeededHandle = document.getElementById("inputSubtitleNeededHandle").value;
+    arrayInputSubtitleNeededHandle = stringInputSubtitleNeededHandle.split("\n");
 
     arrayInputSubtitleNeededHandle.forEach(cleanArrayInputSubtitleNeededHandle);
     arrayInputSubtitleCleaned.forEach(createArrayOutptSubtitle);
     arrayOutputSubtitleHandled.forEach(createStringOutptSubtitle);
 
-    console.log(stringOutputSubtitleHandled);
-
     document.getElementById("outputSubtitleHandled").innerHTML = stringOutputSubtitleHandled;
-
-    arrayInputSubtitleCleaned = [];
-    arrayOutputSubtitleHandled = [];
-    stringOutputSubtitleHandled = "";
-    formatSubtitleHaveIndex = false;
-    firstValueOfTimeLine = "";
-    secondValueOfTimeLine = "";
+    resetAllVariablesToDefaultValue();
 }
 
-function cleanArrayInputSubtitleNeededHandle(value) {
-    let valueTrimmed = value.replace(/^\s+|\s+$/gm, "");
-    if (valueTrimmed != "" && valueTrimmed != "WEBVTT" && valueTrimmed.length > 3) {
-        arrayInputSubtitleCleaned.push(valueTrimmed);
+function cleanArrayInputSubtitleNeededHandle(value, index) {
+    if (value.includes("-->")) {
+        let time = value.replace(/^\s+|\s+$/gm, "");
+        let sentence = arrayInputSubtitleNeededHandle[index+1].replace(/^\s+|\s+$/gm, "");
+        arrayInputSubtitleCleaned.push(time);
+        arrayInputSubtitleCleaned.push(sentence);
     }
 }
 
@@ -62,4 +58,16 @@ function createStringOutptSubtitle(value, index) {
     } else {
         stringOutputSubtitleHandled = stringOutputSubtitleHandled.concat(value);
     }
+}
+
+function resetAllVariablesToDefaultValue(){
+    stringInputSubtitleNeededHandle = "";
+    arrayInputSubtitleNeededHandle = [];
+    arrayInputSubtitleCleaned = [];
+    arrayOutputSubtitleHandled = [];
+    stringOutputSubtitleHandled = "";
+    firstValueOfTimeLine = "";
+    secondValueOfTimeLine = "";
+    oneRecordTimeline = "";
+    oneRecordSubtitle = "";
 }
